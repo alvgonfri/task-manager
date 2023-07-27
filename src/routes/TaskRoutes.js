@@ -15,3 +15,5 @@ router.get("/:id", authRequired, getTask);
 router.post("", authRequired, createTask);
 router.put("/:id", authRequired, updateTask);
 router.delete("/:id", authRequired, deleteTask);
+
+export default router;
