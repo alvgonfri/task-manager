@@ -1,19 +1,26 @@
 import { useForm } from "react-hook-form";
-import { registerRequest } from "../../api/auth.js";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const { register, handleSubmit } = useForm();
+  const { signUp, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    const res = await registerRequest(data);
-    console.log(res);
-  };
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
+
+  const onSubmit = handleSubmit(async (data) => {
+    await signUp(data);
+  });
 
   return (
     <div className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
       <h1>Register form</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <input
           type="text"
           {...register("username", { required: true, min: 3, max: 20 })}
