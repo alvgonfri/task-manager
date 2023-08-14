@@ -1,5 +1,5 @@
-import { createContext, useState, useContext } from "react";
-import { registerRequest } from "../api/auth.js";
+import { createContext, useState, useContext, useEffect } from "react";
+import { registerRequest, loginRequest } from "../api/auth.js";
 import PropTypes from "prop-types";
 
 export const AuthContext = createContext();
@@ -29,8 +29,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signIn = async (user) => {
+    try {
+      const res = await loginRequest(user);
+      console.log(res.data);
+      setUser(res.data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      setErrors(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
   return (
-    <AuthContext.Provider value={{ signUp, user, isAuthenticated, errors }}>
+    <AuthContext.Provider
+      value={{ signUp, signIn, user, isAuthenticated, errors }}
+    >
       {children}
     </AuthContext.Provider>
   );
