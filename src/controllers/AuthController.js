@@ -1,6 +1,10 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
+import jwt from "jsonwebtoken";
+import { TOKEN_SECRET } from "../config.js";
+
+export let TOKEN = "";
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -20,7 +24,8 @@ export const register = async (req, res) => {
     });
     const userSaved = await newUser.save();
     const token = await createAccessToken({ id: userSaved._id });
-    res.cookie("token", token);
+    res.header("Authorization", token);
+    TOKEN = token;
     res.json({
       id: userSaved._id,
       username: userSaved.username,
@@ -44,13 +49,15 @@ export const login = async (req, res) => {
     if (!matchPassword) return res.status(400).json(["Incorrect password"]);
 
     const token = await createAccessToken({ id: userFound._id });
-    res.cookie("token", token);
+    res.header("Authorization", token);
+    TOKEN = token;
     res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
       createdAt: userFound.createdAt,
       updatedAt: userFound.updatedAt,
+      token: token,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -58,8 +65,31 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.cookie("token", "", { expires: new Date(0) });
+  res.header("Authorization", "");
+  TOKEN = "";
   return res.sendStatus(200);
+};
+
+export const verifyToken = (req, res) => {
+  const token = TOKEN;
+  console.log("11111111");
+  if (!token) return res.status(401).json({ message: "Unauthorized a" });
+
+  console.log("2222222222");
+  jwt.verify(token, TOKEN_SECRET, (err, user) => {
+    console.log("333333333333");
+    if (err) return res.status(401).json({ message: "Unauthorized b" });
+
+    const userFound = User.findById(user.id);
+    console.log("4444444444444");
+    if (!userFound) return res.status(401).json({ message: "Unauthorized c" });
+    console.log("yyyyyyyyyyyyy");
+    return res.json({
+      id: userFound._id,
+      username: userFound.username,
+      email: userFound.email,
+    });
+  });
 };
 
 export const getProfile = async (req, res) => {

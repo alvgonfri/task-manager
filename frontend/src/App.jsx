@@ -1,8 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
+import ProtectedRoute from "./ProtectedRoute";
+import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/user/RegisterPage";
 import LoginPage from "./pages/user/LoginPage";
+import ProfilePage from "./pages/user/ProfilePage";
+import TasksPage from "./pages/task/TasksPage";
+import TaskFormPage from "./pages/task/TaskFormPage";
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -13,13 +18,16 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/profile" element={<h1>Profile</h1>} />
-          <Route path="/tasks" element={<h1>Tasks</h1>} />
-          <Route path="/tasks/create" element={<h1>New task</h1>} />
-          <Route path="/tasks/:id" element={<h1>Task</h1>} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/tasks/create" element={<TaskFormPage />} />
+            <Route path="/tasks/:id" element={<TaskFormPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
