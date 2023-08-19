@@ -9,10 +9,6 @@ import ProfilePage from "./pages/user/ProfilePage";
 import TasksPage from "./pages/task/TasksPage";
 import TaskFormPage from "./pages/task/TaskFormPage";
 
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-
 function App() {
   return (
     <AuthProvider>
