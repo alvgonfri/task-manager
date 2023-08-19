@@ -22,7 +22,7 @@ function LoginPage() {
   });
 
   return (
-    <div className=" block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+    <div className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
       <h1>Login form</h1>
       {loginErrors.map((error, i) => (
         <div
