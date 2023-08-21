@@ -8,12 +8,14 @@ import LoginPage from "./pages/user/LoginPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import TasksPage from "./pages/task/TasksPage";
 import TaskFormPage from "./pages/task/TaskFormPage";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <AuthProvider>
       <TaskProvider>
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
