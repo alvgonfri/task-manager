@@ -13,7 +13,7 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/");
+    if (isAuthenticated) navigate("/tasks");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
