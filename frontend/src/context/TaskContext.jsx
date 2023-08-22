@@ -1,7 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import {
   getTasksRequest,
+  getTaskRequest,
   createTaskRequest,
+  updateTaskRequest,
   deleteTaskRequest,
 } from "../api/task.js";
 import PropTypes from "prop-types";
@@ -29,6 +31,15 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const getTask = async (id) => {
+    try {
+      const res = await getTaskRequest(id);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const modifyDeadline = (task) => {
     const { deadline } = task;
     if (deadline) {
@@ -49,6 +60,15 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const updateTask = async (id, task) => {
+    try {
+      modifyDeadline(task);
+      await updateTaskRequest(id, task);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const deleteTask = async (id) => {
     try {
       const res = await deleteTaskRequest(id);
@@ -59,7 +79,9 @@ export const TaskProvider = ({ children }) => {
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, getTasks, createTask, deleteTask }}>
+    <TaskContext.Provider
+      value={{ tasks, getTasks, getTask, createTask, updateTask, deleteTask }}
+    >
       {children}
     </TaskContext.Provider>
   );

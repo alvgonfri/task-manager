@@ -1,18 +1,40 @@
 import { useForm } from "react-hook-form";
 import { useTask } from "../../context/TaskContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 function TaskFormPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
-  const { createTask } = useTask();
+  const { getTask, createTask, updateTask } = useTask();
   const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    async function loadTask() {
+      if (params.id) {
+        const task = await getTask(params.id);
+        setValue("title", task.title);
+        setValue("description", task.description);
+        if (task.deadline) {
+          setValue("deadline", task.deadline.slice(0, 10));
+        }
+      }
+    }
+    loadTask();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    await createTask(data);
+    if (params.id) {
+      await updateTask(params.id, data);
+    } else {
+      await createTask(data);
+    }
     navigate("/tasks");
   });
 
@@ -54,7 +76,7 @@ function TaskFormPage() {
           type="submit"
           className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
         >
-          Create task
+          {params.id ? "Update task" : "Create task"}
         </button>
       </form>
     </div>
