@@ -5,9 +5,9 @@ function Navbar() {
   const { user, isAuthenticated, logOut } = useAuth();
 
   return (
-    <nav className="flex justify-between">
+    <nav className="flex justify-between bg-slate-400 p-5 mb-2">
       <Link to="/">
-        <h1>Task Manager</h1>
+        <h1 className="text-2xl font-bold">Task Manager</h1>
       </Link>
 
       <ul className="flex gap-x-2">

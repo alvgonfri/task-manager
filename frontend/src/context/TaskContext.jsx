@@ -1,5 +1,9 @@
 import { createContext, useContext, useState } from "react";
-import { createTaskRequest, getTasksRequest } from "../api/task.js";
+import {
+  getTasksRequest,
+  createTaskRequest,
+  deleteTaskRequest,
+} from "../api/task.js";
 import PropTypes from "prop-types";
 
 const TaskContext = createContext();
@@ -39,15 +43,23 @@ export const TaskProvider = ({ children }) => {
     try {
       modifyDeadline(task);
       const res = await createTaskRequest(task);
-      console.log(res.data);
-      //setTasks([...tasks, res.data]);
+      setTasks([...tasks, res.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteTask = async (id) => {
+    try {
+      const res = await deleteTaskRequest(id);
+      if (res.status === 204) setTasks(tasks.filter((task) => task._id !== id));
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, getTasks, createTask }}>
+    <TaskContext.Provider value={{ tasks, getTasks, createTask, deleteTask }}>
       {children}
     </TaskContext.Provider>
   );
