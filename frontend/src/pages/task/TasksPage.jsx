@@ -11,7 +11,7 @@ function TasksPage() {
 
   if (tasks.length === 0) {
     return (
-      <div className="">
+      <div>
         <h1>Tasks</h1>
         <p>No tasks</p>
       </div>
@@ -21,7 +21,7 @@ function TasksPage() {
   return (
     <>
       <h1>Tasks</h1>
-      <div className="grid grid-cols-3">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3">
         {tasks.map((task) => (
           <TaskCard key={task._id} task={task} />
         ))}

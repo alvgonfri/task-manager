@@ -10,7 +10,7 @@ function Navbar() {
         <h1 className="text-2xl font-bold">Task Manager</h1>
       </Link>
 
-      <ul className="flex gap-x-2">
+      <ul className="flex gap-x-5">
         {isAuthenticated ? (
           <>
             <li>

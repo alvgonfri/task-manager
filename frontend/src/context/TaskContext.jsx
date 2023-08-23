@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
   getTasksRequest,
   getTaskRequest,
@@ -21,6 +21,18 @@ export const useTask = () => {
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [errors, setErrors] = useState([]);
+
+  // Clear form errors after 5 seconds
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
 
   const getTasks = async () => {
     try {
@@ -57,6 +69,7 @@ export const TaskProvider = ({ children }) => {
       setTasks([...tasks, res.data]);
     } catch (error) {
       console.log(error);
+      setErrors(error.response.data);
     }
   };
 
@@ -66,6 +79,7 @@ export const TaskProvider = ({ children }) => {
       await updateTaskRequest(id, task);
     } catch (error) {
       console.log(error);
+      setErrors(error.response.data);
     }
   };
 
@@ -80,7 +94,15 @@ export const TaskProvider = ({ children }) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, getTasks, getTask, createTask, updateTask, deleteTask }}
+      value={{
+        tasks,
+        getTasks,
+        getTask,
+        createTask,
+        updateTask,
+        deleteTask,
+        errors,
+      }}
     >
       {children}
     </TaskContext.Provider>

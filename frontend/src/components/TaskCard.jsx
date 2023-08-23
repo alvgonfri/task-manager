@@ -20,9 +20,12 @@ function TaskCard({ task }) {
       )}
       <hr></hr>
       <div className="flex gap-x-2 justify-end">
-        <button className="bg-slate-400 p-2 my-2 rounded-md">
-          <Link to={`/tasks/${task._id}`}>Edit</Link>
-        </button>
+        <Link
+          to={`/tasks/${task._id}`}
+          className="bg-slate-400 p-2 my-2 rounded-md"
+        >
+          Edit
+        </Link>
         <button
           className="bg-slate-400 p-2 my-2 rounded-md"
           onClick={() => deleteTask(task._id)}

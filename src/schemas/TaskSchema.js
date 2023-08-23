@@ -13,10 +13,10 @@ export const createOrUpdateTaskSchema = z.object({
     .datetime({ message: "Invalid deadline" })
     .refine(
       (val) => {
-        const date = new Date(val);
-        return date > new Date();
+        const deadline = new Date(val).toISOString().slice(0, 10);
+        return deadline >= new Date().toISOString().slice(0, 10);
       },
-      { message: "Deadline must be in the future" }
+      { message: "Deadline must be today or later" }
     )
     .optional(),
 });
