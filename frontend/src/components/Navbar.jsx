@@ -1,44 +1,86 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faRightFromBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
   const { user, isAuthenticated, logOut } = useAuth();
 
-  return (
-    <nav className="flex justify-between bg-slate-400 p-5 mb-2">
-      <Link to="/">
-        <h1 className="text-2xl font-bold">Task Manager</h1>
-      </Link>
+  const openMenu = () => {
+    if (isAuthenticated) {
+      const menu = document.getElementById("authMenu");
+      menu.classList.toggle("hidden");
+    } else {
+      const menu = document.getElementById("noAuthMenu");
+      menu.classList.toggle("hidden");
+    }
+  };
 
-      <ul className="flex gap-x-5">
-        {isAuthenticated ? (
-          <>
-            <li>
-              <Link to="/tasks">Tasks</Link>
-            </li>
-            <li>
-              <Link to="/tasks/create">Create task</Link>
-            </li>
-            <li>
-              <Link to="/" onClick={() => logOut()}>
-                Logout
-              </Link>
-            </li>
-            <li>
-              <h1>{user.username}</h1>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </>
-        )}
-      </ul>
+  return (
+    <nav className="bg-slate-700 text-slate-50 flex gap-x-5 px-10 py-5 mb-2">
+      <Link to="/">
+        <img src="/src/assets/logo/logo.png" alt="logo" className="h-10" />
+      </Link>
+      <div className="flex lg:hidden flex-grow justify-end">
+        <button
+          className="bg-slate-400 hover:bg-slate-500 px-3 py-1 rounded-md border"
+          onClick={openMenu}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+      </div>
+
+      {isAuthenticated ? (
+        <div
+          id="authMenu"
+          className="bg-slate-700 lg:flex hidden flex-grow items-center justify-between absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0"
+        >
+          <div className="flex gap-x-5 flex-col lg:flex-row gap-y-2 lg:gap-y-0 mb-2 lg:mb-0">
+            <Link to="/tasks" className=" hover:font-bold">
+              Tasks
+            </Link>
+            <Link to="/tasks/create" className=" hover:font-bold">
+              Create task
+            </Link>
+          </div>
+          <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0">
+            <Link
+              to="/"
+              onClick={() => logOut()}
+              className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} /> Logout
+            </Link>
+            <h1 className="flex items-center">
+              <FontAwesomeIcon icon={faUser} /> &nbsp; {user.username}
+            </h1>
+          </div>
+        </div>
+      ) : (
+        <div
+          id="noAuthMenu"
+          className="bg-slate-700 lg:flex hidden flex-grow items-center justify-end absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0"
+        >
+          <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0 mb-2 lg:mb-0">
+            <Link
+              to="/login"
+              className="hover:bg-slate-50 hover:text-slate-700 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+            >
+              Register
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
