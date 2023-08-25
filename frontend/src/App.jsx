@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <main className="bg-slate-50 h-screen">
+    <main className="bg-slate-50 h-screen pt-24">
       <AuthProvider>
         <TaskProvider>
           <BrowserRouter>

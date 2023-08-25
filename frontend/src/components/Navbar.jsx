@@ -21,9 +21,13 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-slate-700 text-slate-50 flex gap-x-5 px-10 py-5 mb-2">
+    <nav className="bg-slate-700 text-slate-50 flex gap-x-5 px-10 py-5 mb-2 fixed top-0 left-0 right-0">
       <Link to="/">
-        <img src="/src/assets/logo/logo.png" alt="logo" className="h-10" />
+        <img
+          src="/src/assets/logo/logo.png"
+          alt="logo"
+          className="h-10 hover:opacity-50 transition duration-500"
+        />
       </Link>
       <div className="flex lg:hidden flex-grow justify-end">
         <button

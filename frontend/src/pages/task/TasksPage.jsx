@@ -20,8 +20,8 @@ function TasksPage() {
 
   return (
     <>
-      <h1>Tasks</h1>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3">
+      <h1 className="font-semibold text-xl flex justify-center mb-5">TASKS</h1>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
         {tasks.map((task) => (
           <TaskCard key={task._id} task={task} />
         ))}
