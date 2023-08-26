@@ -12,7 +12,9 @@ function TasksPage() {
   if (tasks.length === 0) {
     return (
       <div>
-        <h1>Tasks</h1>
+        <h1 className="font-semibold text-xl flex justify-center mb-5">
+          TASKS
+        </h1>
         <p>No tasks</p>
       </div>
     );
