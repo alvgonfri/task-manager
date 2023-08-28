@@ -8,7 +8,7 @@ function TaskCard({ task }) {
   const { deleteTask } = useTask();
 
   return (
-    <div className="bg-slate-200 p-2 rounded-md w-80 sm:w-auto h-auto sm:h-44 border border-slate-300">
+    <div className="bg-slate-200 p-2 rounded-md w-80 sm:w-auto h-auto sm:h-44 border border-slate-300 shadow-md">
       <div className="flex justify-between">
         <p className="text-xl font-bold mt-3 mr-2 truncate">{task.title}</p>
         <div className="flex gap-x-2 justify-end">
