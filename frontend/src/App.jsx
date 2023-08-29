@@ -7,6 +7,7 @@ import RegisterPage from "./pages/user/RegisterPage";
 import LoginPage from "./pages/user/LoginPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import TasksPage from "./pages/task/TasksPage";
+import TaskPage from "./pages/task/TaskPage";
 import TaskFormPage from "./pages/task/TaskFormPage";
 import Navbar from "./components/Navbar";
 
@@ -26,8 +27,9 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/tasks" element={<TasksPage />} />
+                  <Route path="/tasks/:id" element={<TaskPage />} />
                   <Route path="/tasks/create" element={<TaskFormPage />} />
-                  <Route path="/tasks/:id" element={<TaskFormPage />} />
+                  <Route path="/tasks/update/:id" element={<TaskFormPage />} />
                 </Route>
               </Routes>
             </main>

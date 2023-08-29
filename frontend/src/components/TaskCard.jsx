@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTask } from "../context/TaskContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPen, faEye } from "@fortawesome/free-solid-svg-icons";
 
 /* eslint-disable react/prop-types */
 function TaskCard({ task }) {
@@ -16,13 +16,19 @@ function TaskCard({ task }) {
             to={`/tasks/${task._id}`}
             className="bg-slate-400 text-slate-700 px-3 py-2 mt-2 rounded-md border border-slate-700 hover:bg-slate-700 hover:text-slate-400 hover:border-slate-400 transition duration-500"
           >
+            <FontAwesomeIcon icon={faEye} className="mt-1" />
+          </Link>
+          <Link
+            to={`/tasks/update/${task._id}`}
+            className="bg-slate-400 text-slate-700 px-3 py-2 mt-2 rounded-md border border-slate-700 hover:bg-slate-700 hover:text-slate-400 hover:border-slate-400 transition duration-500"
+          >
             <FontAwesomeIcon icon={faPen} />
           </Link>
           <button
             className="bg-red-600 text-slate-50 px-3 py-2 mt-2 rounded-md border border-slate-50 hover:bg-slate-50 hover:text-red-600 hover:border-red-600  transition duration-500"
             onClick={() => deleteTask(task._id)}
           >
-            <FontAwesomeIcon icon={faTrash} className=" w-4" />
+            <FontAwesomeIcon icon={faTrash} className="w-4" />
           </button>
         </div>
       </div>
