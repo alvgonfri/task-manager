@@ -37,7 +37,7 @@ function TaskCard({ task }) {
       ) : (
         <p className="line-clamp-3 opacity-50">No desc.</p>
       )}
-      <hr className="border border-slate-300"></hr>
+      <hr className="border border-slate-300 my-1"></hr>
       {task.deadline ? (
         <p>
           <span className="font-semibold">Deadline:</span>{" "}

@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -8,17 +10,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isAuthenticated, logOut } = useAuth();
+  const location = useLocation();
 
-  const openMenu = () => {
-    if (isAuthenticated) {
-      const menu = document.getElementById("authMenu");
-      menu.classList.toggle("hidden");
-    } else {
-      const menu = document.getElementById("noAuthMenu");
-      menu.classList.toggle("hidden");
-    }
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
 
   return (
     <nav className="bg-slate-700 text-slate-50 flex gap-x-5 px-10 py-5 mb-2 fixed top-0 left-0 right-0">
@@ -32,7 +34,7 @@ function Navbar() {
       <div className="flex lg:hidden flex-grow justify-end">
         <button
           className="bg-slate-400 hover:bg-slate-500 px-3 py-1 rounded-md border"
-          onClick={openMenu}
+          onClick={toggleMenu}
         >
           <FontAwesomeIcon icon={faBars} />
         </button>
@@ -41,7 +43,9 @@ function Navbar() {
       {isAuthenticated ? (
         <div
           id="authMenu"
-          className="bg-slate-700 lg:flex hidden flex-grow items-center justify-between absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0"
+          className={`bg-slate-700 lg:flex ${
+            isMenuOpen ? "block" : "hidden"
+          } lg:flex-grow items-center justify-between absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0`}
         >
           <div className="flex gap-x-5 flex-col lg:flex-row gap-y-2 lg:gap-y-0 mb-2 lg:mb-0">
             <Link to="/tasks" className=" hover:font-bold">
@@ -67,7 +71,9 @@ function Navbar() {
       ) : (
         <div
           id="noAuthMenu"
-          className="bg-slate-700 lg:flex hidden flex-grow items-center justify-end absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0"
+          className={`bg-slate-700 lg:flex ${
+            isMenuOpen ? "block" : "hidden"
+          } lg:flex-grow items-center justify-end absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0`}
         >
           <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0 mb-2 lg:mb-0">
             <Link
