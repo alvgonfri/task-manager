@@ -92,6 +92,22 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const changeTaskStatus = async (id, status) => {
+    try {
+      const res = await getTaskRequest(id);
+      const task = res.data;
+      task.status = status;
+      await updateTaskRequest(id, task);
+      setTasks(
+        tasks.map((task) =>
+          task._id === id ? { ...task, status: status } : task
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <TaskContext.Provider
       value={{
@@ -101,6 +117,7 @@ export const TaskProvider = ({ children }) => {
         createTask,
         updateTask,
         deleteTask,
+        changeTaskStatus,
         errors,
       }}
     >
