@@ -42,7 +42,6 @@ function Navbar() {
 
       {isAuthenticated ? (
         <div
-          id="authMenu"
           className={`bg-slate-700 lg:flex ${
             isMenuOpen ? "block" : "hidden"
           } lg:flex-grow items-center justify-between absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0`}
@@ -70,7 +69,6 @@ function Navbar() {
         </div>
       ) : (
         <div
-          id="noAuthMenu"
           className={`bg-slate-700 lg:flex ${
             isMenuOpen ? "block" : "hidden"
           } lg:flex-grow items-center justify-end absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0`}

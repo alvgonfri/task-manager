@@ -43,6 +43,15 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const getTasksByStatus = async (status) => {
+    try {
+      const res = await getTasksRequest();
+      setTasks(res.data.filter((task) => task.status === status));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getTask = async (id) => {
     try {
       const res = await getTaskRequest(id);
@@ -113,6 +122,7 @@ export const TaskProvider = ({ children }) => {
       value={{
         tasks,
         getTasks,
+        getTasksByStatus,
         getTask,
         createTask,
         updateTask,
