@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useTask } from "../../context/TaskContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import BackButton from "../../components/BackButton";
 
@@ -14,6 +14,7 @@ function TaskFormPage() {
   const { getTask, createTask, updateTask, errors: formErrors } = useTask();
   const navigate = useNavigate();
   const params = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     async function loadTask() {
@@ -24,11 +25,15 @@ function TaskFormPage() {
         if (task.deadline) {
           setValue("deadline", task.deadline.slice(0, 10));
         }
+      } else {
+        setValue("title", "");
+        setValue("description", "");
+        setValue("deadline", "");
       }
     }
     loadTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location]);
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
