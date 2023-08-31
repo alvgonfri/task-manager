@@ -46,7 +46,19 @@ export const TaskProvider = ({ children }) => {
   const getTasksByStatus = async (status) => {
     try {
       const res = await getTasksRequest();
-      setTasks(res.data.filter((task) => task.status === status));
+      const tasks = res.data.filter((task) => task.status === status);
+      tasks.sort((a, b) => {
+        if (a.deadline && b.deadline) {
+          return new Date(a.deadline) - new Date(b.deadline);
+        } else if (a.deadline) {
+          return -1;
+        } else if (b.deadline) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      setTasks(tasks);
     } catch (error) {
       console.log(error);
     }
