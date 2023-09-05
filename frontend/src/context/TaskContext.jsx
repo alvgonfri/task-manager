@@ -21,6 +21,7 @@ export const useTask = () => {
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [taskStatusFlag, setTaskStatusFlag] = useState(0);
   const [errors, setErrors] = useState([]);
 
   // Clear form errors after 5 seconds
@@ -119,6 +120,8 @@ export const TaskProvider = ({ children }) => {
       const task = res.data;
       task.status = status;
       await updateTaskRequest(id, task);
+      if (taskStatusFlag === 0) setTaskStatusFlag(1);
+      else setTaskStatusFlag(0);
       setTasks(
         tasks.map((task) =>
           task._id === id ? { ...task, status: status } : task
@@ -133,6 +136,7 @@ export const TaskProvider = ({ children }) => {
     <TaskContext.Provider
       value={{
         tasks,
+        taskStatusFlag,
         getTasks,
         getTasksByStatus,
         getTask,
