@@ -11,7 +11,29 @@ function TaskCard({ task }) {
     <div
       className={`bg-slate-200 p-2 rounded-md w-80 sm:w-auto h-auto ${
         task.status === "completed" ? "sm:h-44" : "sm:h-56"
-      } border border-slate-300 shadow-md flex flex-col justify-between`}
+      } border-slate-300 border-2 ${
+        task.status !== "completed" &&
+        (!task.deadline ||
+          (task.deadline &&
+            new Date(task.deadline).toISOString().slice(0, 10) >
+              new Date().toISOString().slice(0, 10)))
+          ? "border-green-600 border-2"
+          : ""
+      } ${
+        task.status !== "completed" &&
+        task.deadline &&
+        new Date(task.deadline).toISOString().slice(0, 10) ===
+          new Date().toISOString().slice(0, 10)
+          ? "border-yellow-400 border-2"
+          : ""
+      } ${
+        task.status !== "completed" &&
+        task.deadline &&
+        new Date(task.deadline).toISOString().slice(0, 10) <
+          new Date().toISOString().slice(0, 10)
+          ? "border-red-600 border-2"
+          : ""
+      }   shadow-md flex flex-col justify-between`}
     >
       <div>
         <div className="flex justify-between">
@@ -31,7 +53,7 @@ function TaskCard({ task }) {
               <FontAwesomeIcon icon={faPen} />
             </Link>
             <button
-              className="bg-red-600 text-slate-50 px-3 py-2 mt-2 rounded-md border border-slate-50 hover:bg-slate-50 hover:text-red-600 hover:border-red-600  transition duration-500"
+              className="bg-red-600 text-slate-50 px-3 py-2 mt-2 rounded-md border border-slate-50 hover:bg-slate-50 hover:text-red-600 hover:border-red-600 transition duration-500"
               onClick={() => {
                 if (
                   window.confirm("Are you sure you wish to delete this task?")
