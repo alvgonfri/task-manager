@@ -11,29 +11,25 @@ function TaskCard({ task }) {
     <div
       className={`bg-slate-200 p-2 rounded-md w-80 sm:w-auto h-auto ${
         task.status === "completed" ? "sm:h-44" : "sm:h-56"
-      } border-slate-300 border-2 ${
+      } border ${
         task.status !== "completed" &&
         (!task.deadline ||
           (task.deadline &&
             new Date(task.deadline).toISOString().slice(0, 10) >
               new Date().toISOString().slice(0, 10)))
           ? "border-green-600 border-2"
-          : ""
-      } ${
-        task.status !== "completed" &&
-        task.deadline &&
-        new Date(task.deadline).toISOString().slice(0, 10) ===
-          new Date().toISOString().slice(0, 10)
+          : task.status !== "completed" &&
+            task.deadline &&
+            new Date(task.deadline).toISOString().slice(0, 10) ===
+              new Date().toISOString().slice(0, 10)
           ? "border-yellow-400 border-2"
-          : ""
-      } ${
-        task.status !== "completed" &&
-        task.deadline &&
-        new Date(task.deadline).toISOString().slice(0, 10) <
-          new Date().toISOString().slice(0, 10)
+          : task.status !== "completed" &&
+            task.deadline &&
+            new Date(task.deadline).toISOString().slice(0, 10) <
+              new Date().toISOString().slice(0, 10)
           ? "border-red-600 border-2"
-          : ""
-      }   shadow-md flex flex-col justify-between`}
+          : "border-slate-300 border-2"
+      } shadow-md flex flex-col justify-between`}
     >
       <div>
         <div className="flex justify-between">
@@ -83,24 +79,37 @@ function TaskCard({ task }) {
           <p className="font-semibold">No deadline</p>
         )}
       </div>
+
       <div className="flex justify-center">
-        {task.status === "pending" ? (
+        {(task.status === "pending" &&
+          task.deadline &&
+          new Date(task.deadline).toISOString().slice(0, 10) >=
+            new Date().toISOString().slice(0, 10)) ||
+        (task.status === "pending" && !task.deadline) ? (
           <button
             onClick={() => changeTaskStatus(task._id, "in-progress")}
             className="bg-slate-700 text-slate-400 px-2 py-1 mt-1 rounded-md border border-slate-400 hover:bg-slate-400 hover:text-slate-700 hover:border-slate-700 transition duration-500"
           >
             <p className="font-semibold">Start</p>
           </button>
-        ) : (
-          <></>
-        )}
-        {task.status === "in-progress" ? (
+        ) : (task.status === "in-progress" &&
+            task.deadline &&
+            new Date(task.deadline).toISOString().slice(0, 10) >=
+              new Date().toISOString().slice(0, 10)) ||
+          (task.status === "in-progress" && !task.deadline) ? (
           <button
             onClick={() => changeTaskStatus(task._id, "completed")}
             className="bg-slate-700 text-slate-400 px-2 py-1 mt-1 rounded-md border border-slate-400 hover:bg-slate-400 hover:text-slate-700 hover:border-slate-700 transition duration-500"
           >
             <p className="font-semibold">Set as completed</p>
           </button>
+        ) : (task.status === "pending" || task.status === "in-progress") &&
+          task.deadline &&
+          new Date(task.deadline).toISOString().slice(0, 10) <
+            new Date().toISOString().slice(0, 10) ? (
+          <div className="bg-red-700 text-slate-50 px-2 py-1 mt-1 rounded-md border border-slate-50">
+            Uncompleted at deadline
+          </div>
         ) : (
           <></>
         )}

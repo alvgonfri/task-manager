@@ -27,7 +27,27 @@ function TaskPage() {
     <>
       <BackButton />
       <div className="flex justify-center mt-2">
-        <div className="bg-slate-200 p-2 rounded-md w-5/6 lg:w-1/2 border border-slate-300 shadow-md">
+        <div
+          className={`bg-slate-200 p-2 rounded-md w-5/6 lg:w-1/2 border ${
+            task.status !== "completed" &&
+            (!task.deadline ||
+              (task.deadline &&
+                new Date(task.deadline).toISOString().slice(0, 10) >
+                  new Date().toISOString().slice(0, 10)))
+              ? "border-green-600 border-2"
+              : task.status !== "completed" &&
+                task.deadline &&
+                new Date(task.deadline).toISOString().slice(0, 10) ===
+                  new Date().toISOString().slice(0, 10)
+              ? "border-yellow-400 border-2"
+              : task.status !== "completed" &&
+                task.deadline &&
+                new Date(task.deadline).toISOString().slice(0, 10) <
+                  new Date().toISOString().slice(0, 10)
+              ? "border-red-600 border-2"
+              : "border-slate-300 border-2"
+          } shadow-md`}
+        >
           <p className="text-xl font-bold text-center break-words">
             {task.title}
           </p>
@@ -41,7 +61,14 @@ function TaskPage() {
             </Link>
             <button
               className="bg-red-600 text-slate-50 px-3 py-2 mt-2 rounded-md border border-slate-50 hover:bg-slate-50 hover:text-red-600 hover:border-red-600  transition duration-500"
-              onClick={() => deleteTask(task._id)}
+              onClick={() => {
+                if (
+                  window.confirm("Are you sure you wish to delete this task?")
+                ) {
+                  deleteTask(task._id);
+                  navigate("/tasks");
+                }
+              }}
             >
               <FontAwesomeIcon icon={faTrash} className="w-4" />
             </button>
@@ -65,7 +92,11 @@ function TaskPage() {
           )}
 
           <div className="flex justify-center">
-            {task.status === "pending" ? (
+            {(task.status === "pending" &&
+              task.deadline &&
+              new Date(task.deadline).toISOString().slice(0, 10) >=
+                new Date().toISOString().slice(0, 10)) ||
+            (task.status === "pending" && !task.deadline) ? (
               <button
                 onClick={() =>
                   changeTaskStatus(task._id, "in-progress") &&
@@ -75,10 +106,11 @@ function TaskPage() {
               >
                 <p className="font-semibold">Start</p>
               </button>
-            ) : (
-              <></>
-            )}
-            {task.status === "in-progress" ? (
+            ) : (task.status === "in-progress" &&
+                task.deadline &&
+                new Date(task.deadline).toISOString().slice(0, 10) >=
+                  new Date().toISOString().slice(0, 10)) ||
+              (task.status === "in-progress" && !task.deadline) ? (
               <button
                 onClick={() =>
                   changeTaskStatus(task._id, "completed") && navigate("/tasks")
@@ -87,6 +119,13 @@ function TaskPage() {
               >
                 <p className="font-semibold">Set as completed</p>
               </button>
+            ) : (task.status === "pending" || task.status === "in-progress") &&
+              task.deadline &&
+              new Date(task.deadline).toISOString().slice(0, 10) <
+                new Date().toISOString().slice(0, 10) ? (
+              <div className="bg-red-700 text-slate-50 px-2 py-1 mt-1 rounded-md border border-slate-50">
+                Uncompleted at deadline
+              </div>
             ) : (
               <></>
             )}
