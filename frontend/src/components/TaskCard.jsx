@@ -32,7 +32,12 @@ function TaskCard({ task }) {
             </Link>
             <button
               className="bg-red-600 text-slate-50 px-3 py-2 mt-2 rounded-md border border-slate-50 hover:bg-slate-50 hover:text-red-600 hover:border-red-600  transition duration-500"
-              onClick={() => deleteTask(task._id)}
+              onClick={() => {
+                if (
+                  window.confirm("Are you sure you wish to delete this task?")
+                )
+                  deleteTask(task._id);
+              }}
             >
               <FontAwesomeIcon icon={faTrash} className="w-4" />
             </button>

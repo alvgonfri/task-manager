@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -12,6 +12,7 @@ import {
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isAuthenticated, logOut } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const toggleMenu = () => {
@@ -55,13 +56,17 @@ function Navbar() {
             </Link>
           </div>
           <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0">
-            <Link
-              to="/"
-              onClick={() => logOut()}
+            <button
+              onClick={() => {
+                if (window.confirm("Are you sure you wish to logout?")) {
+                  logOut();
+                  navigate("/");
+                }
+              }}
               className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
             >
               <FontAwesomeIcon icon={faRightFromBracket} /> Logout
-            </Link>
+            </button>
             <h1 className="flex items-center">
               <FontAwesomeIcon icon={faUser} /> &nbsp; {user.username}
             </h1>
