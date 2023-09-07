@@ -44,7 +44,7 @@ function TaskPage() {
                 task.deadline &&
                 new Date(task.deadline).toISOString().slice(0, 10) <
                   new Date().toISOString().slice(0, 10)
-              ? "border-red-600 border-2"
+              ? "border-red-700 border-2"
               : "border-slate-300 border-2"
           } shadow-md`}
         >
@@ -53,12 +53,16 @@ function TaskPage() {
           </p>
 
           <div className="flex gap-x-2 justify-center my-2">
-            <Link
-              to={`/tasks/update/${task._id}`}
-              className="bg-slate-400 text-slate-700 px-3 py-2 mt-2 rounded-md border border-slate-700 hover:bg-slate-700 hover:text-slate-400 hover:border-slate-400 transition duration-500"
-            >
-              <FontAwesomeIcon icon={faPen} />
-            </Link>
+            {task.status !== "completed" ? (
+              <Link
+                to={`/tasks/update/${task._id}`}
+                className="bg-slate-400 text-slate-700 px-3 py-2 mt-2 rounded-md border border-slate-700 hover:bg-slate-700 hover:text-slate-400 hover:border-slate-400 transition duration-500"
+              >
+                <FontAwesomeIcon icon={faPen} />
+              </Link>
+            ) : (
+              <></>
+            )}
             <button
               className="bg-red-600 text-slate-50 px-3 py-2 mt-2 rounded-md border border-slate-50 hover:bg-slate-50 hover:text-red-600 hover:border-red-600  transition duration-500"
               onClick={() => {
