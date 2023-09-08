@@ -11,6 +11,7 @@ import {
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user, isAuthenticated, logOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,8 +20,13 @@ function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   useEffect(() => {
     setIsMenuOpen(false);
+    setIsDropdownOpen(false);
   }, [location]);
 
   return (
@@ -55,21 +61,37 @@ function Navbar() {
               Create task
             </Link>
           </div>
+
           <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0">
             <button
-              onClick={() => {
-                if (window.confirm("Are you sure you wish to logout?")) {
-                  logOut();
-                  navigate("/");
-                }
-              }}
-              className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+              onClick={toggleDropdown}
+              className="flex items-center hover:font-bold"
             >
-              <FontAwesomeIcon icon={faRightFromBracket} /> Logout
-            </button>
-            <h1 className="flex items-center">
               <FontAwesomeIcon icon={faUser} /> &nbsp; {user.username}
-            </h1>
+            </button>
+            <div
+              className={`${
+                isDropdownOpen ? "block" : "hidden"
+              } absolute top-24 lg:top-12 lg:right-0 bg-slate-700 p-3 rounded-md shadow-md  flex flex-col gap-y-2`}
+            >
+              <Link
+                to="/profile"
+                className="block py-1 rounded-md hover:bg-slate-600"
+              >
+                My profile
+              </Link>
+              <button
+                onClick={() => {
+                  if (window.confirm("Are you sure you wish to logout?")) {
+                    logOut();
+                    navigate("/");
+                  }
+                }}
+                className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+              >
+                <FontAwesomeIcon icon={faRightFromBracket} /> Logout
+              </button>
+            </div>
           </div>
         </div>
       ) : (
