@@ -21,6 +21,7 @@ export const useTask = () => {
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [taskStatusFlag, setTaskStatusFlag] = useState(0);
   const [errors, setErrors] = useState([]);
 
   // Clear form errors after 5 seconds
@@ -38,6 +39,27 @@ export const TaskProvider = ({ children }) => {
     try {
       const res = await getTasksRequest();
       setTasks(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTasksByStatus = async (status) => {
+    try {
+      const res = await getTasksRequest();
+      const tasks = res.data.filter((task) => task.status === status);
+      tasks.sort((a, b) => {
+        if (a.deadline && b.deadline) {
+          return new Date(a.deadline) - new Date(b.deadline);
+        } else if (a.deadline) {
+          return -1;
+        } else if (b.deadline) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      setTasks(tasks);
     } catch (error) {
       console.log(error);
     }
@@ -92,15 +114,36 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const changeTaskStatus = async (id, status) => {
+    try {
+      const res = await getTaskRequest(id);
+      const task = res.data;
+      task.status = status;
+      await updateTaskRequest(id, task);
+      if (taskStatusFlag === 0) setTaskStatusFlag(1);
+      else setTaskStatusFlag(0);
+      setTasks(
+        tasks.map((task) =>
+          task._id === id ? { ...task, status: status } : task
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <TaskContext.Provider
       value={{
         tasks,
+        taskStatusFlag,
         getTasks,
+        getTasksByStatus,
         getTask,
         createTask,
         updateTask,
         deleteTask,
+        changeTaskStatus,
         errors,
       }}
     >

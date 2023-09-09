@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -8,17 +10,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user, isAuthenticated, logOut } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const openMenu = () => {
-    if (isAuthenticated) {
-      const menu = document.getElementById("authMenu");
-      menu.classList.toggle("hidden");
-    } else {
-      const menu = document.getElementById("noAuthMenu");
-      menu.classList.toggle("hidden");
-    }
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
+  }, [location]);
 
   return (
     <nav className="bg-slate-700 text-slate-50 flex gap-x-5 px-10 py-5 mb-2 fixed top-0 left-0 right-0">
@@ -32,7 +41,7 @@ function Navbar() {
       <div className="flex lg:hidden flex-grow justify-end">
         <button
           className="bg-slate-400 hover:bg-slate-500 px-3 py-1 rounded-md border"
-          onClick={openMenu}
+          onClick={toggleMenu}
         >
           <FontAwesomeIcon icon={faBars} />
         </button>
@@ -40,8 +49,9 @@ function Navbar() {
 
       {isAuthenticated ? (
         <div
-          id="authMenu"
-          className="bg-slate-700 lg:flex hidden flex-grow items-center justify-between absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0"
+          className={`bg-slate-700 lg:flex ${
+            isMenuOpen ? "block" : "hidden"
+          } lg:flex-grow items-center justify-between absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0`}
         >
           <div className="flex gap-x-5 flex-col lg:flex-row gap-y-2 lg:gap-y-0 mb-2 lg:mb-0">
             <Link to="/tasks" className=" hover:font-bold">
@@ -51,23 +61,44 @@ function Navbar() {
               Create task
             </Link>
           </div>
+
           <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0">
-            <Link
-              to="/"
-              onClick={() => logOut()}
-              className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+            <button
+              onClick={toggleDropdown}
+              className="flex items-center hover:font-bold"
             >
-              <FontAwesomeIcon icon={faRightFromBracket} /> Logout
-            </Link>
-            <h1 className="flex items-center">
               <FontAwesomeIcon icon={faUser} /> &nbsp; {user.username}
-            </h1>
+            </button>
+            <div
+              className={`${
+                isDropdownOpen ? "block" : "hidden"
+              } absolute top-24 lg:top-12 lg:right-0 bg-slate-700 p-3 rounded-md shadow-md  flex flex-col gap-y-2`}
+            >
+              <Link
+                to="/profile"
+                className="block py-1 rounded-md hover:bg-slate-600"
+              >
+                My profile
+              </Link>
+              <button
+                onClick={() => {
+                  if (window.confirm("Are you sure you wish to logout?")) {
+                    logOut();
+                    navigate("/");
+                  }
+                }}
+                className="bg-slate-400 hover:bg-slate-500 rounded-md border border-slate-50 px-3 py-1 transition duration-500"
+              >
+                <FontAwesomeIcon icon={faRightFromBracket} /> Logout
+              </button>
+            </div>
           </div>
         </div>
       ) : (
         <div
-          id="noAuthMenu"
-          className="bg-slate-700 lg:flex hidden flex-grow items-center justify-end absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0"
+          className={`bg-slate-700 lg:flex ${
+            isMenuOpen ? "block" : "hidden"
+          } lg:flex-grow items-center justify-end absolute lg:relative top-16 lg:top-0 w-full lg:w-auto left-0 py-2 lg:py-0 px-10 lg:px-0`}
         >
           <div className="flex gap-x-5 items-start lg:items-stretch flex-col lg:flex-row gap-y-2 lg:gap-y-0 mb-2 lg:mb-0">
             <Link
