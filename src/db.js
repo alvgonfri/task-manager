@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1/task-manager-db");
+    await mongoose.connect(process.env.DB_DEPLOY);
     console.log(">>> DB is connected");
   } catch (error) {
     console.log(error);
