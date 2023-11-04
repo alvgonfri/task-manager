@@ -33,7 +33,7 @@ function Navbar() {
     <nav className="bg-slate-700 text-slate-50 flex gap-x-5 px-10 py-5 mb-2 fixed top-0 left-0 right-0">
       <Link to="/">
         <img
-          src="/src/assets/logo/logo.png"
+          src="/public/assets/logo/logo.png"
           alt="logo"
           className="h-10 hover:opacity-50 transition duration-500"
         />
