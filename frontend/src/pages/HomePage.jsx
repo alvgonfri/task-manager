@@ -14,7 +14,7 @@ function HomePage() {
       <div className="md:grid grid-cols-2">
         <div className="p-5">
           <img
-            src="/public/assets/home_image.jpg"
+            src="/assets/home_image.jpg"
             alt="home image"
             className="rounded-lg"
           />
